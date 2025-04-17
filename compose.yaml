@@ -10,6 +10,14 @@ services:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     command: --replSet rs0 --oplogSize 128
 
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.3
@@ -30,19 +38,38 @@ services:
     ports:
       - 29092:29092
 
+  apicurio:
+    image: apicurio/apicurio-registry-mem:2.6.2.Final
+    ports:
+      - 8080:8080
+
   debezium:
-    image: debezium/connect:1.4
+    image: debezium/connect:3.0.0.Final
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: my_status_topic
-      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
-    depends_on: [kafka]
+      KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      VALUE_CONVERTER: io.apicurio.registry.utils.converter.AvroConverter 
+      # KEY_CONVERTER_SCHEMAS_ENABLE: true
+      VALUE_CONVERTER_SCHEMAS_ENABLE: true
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: true
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: true
+      ENABLE_APICURIO_CONVERTERS: true
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_URL: http://apicurio:8080/apis/registry/v2
+      # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER: true
+      # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_FIND-LATEST: true
+      CONNECT_VALUE_CONVERTER: io.apicurio.registry.utils.converter.AvroConverter
+      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL: http://apicurio:8080/apis/registry/v2
+      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER: true
+      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST: true
+      CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE: avro
+      # CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
+      # CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
+    depends_on: [kafka, apicurio]
     ports:
       - 8083:8083
 
