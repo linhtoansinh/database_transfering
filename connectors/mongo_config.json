@@ -1,11 +1,12 @@
 {
-  "name": "mongo-connector2", 
+  "name": "mongo-connector", 
   "config": {
     "connector.class": "io.debezium.connector.mongodb.MongoDbConnector", 
-    "mongodb.connection.string": "mongodb://mongo", 
     "mongodb.name": "test",
     "mongodb.hosts": "rs0/mongo",
-    "topic.prefix": "fullfillment", 
+    "mongodb.user": "debezium",
+    "mongodb.password": "password",
+    "topic.prefix": "test", 
     "collection.include.list": "test.products",
     "tasks.max": "1"
   }
