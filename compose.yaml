@@ -38,47 +38,47 @@ services:
     ports:
       - 29092:29092
 
-  apicurio:
-    image: apicurio/apicurio-registry-mem:2.6.2.Final
-    ports:
-      - 8080:8080
+  # apicurio:
+  #   image: apicurio/apicurio-registry-mem:2.6.2.Final
+  #   ports:
+  #     - 8080:8080
 
   debezium:
-    image: debezium/connect:3.0.0.Final
+    image: debezium/connect:2.3
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: my_status_topic
-      KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      VALUE_CONVERTER: io.apicurio.registry.utils.converter.AvroConverter 
-      # KEY_CONVERTER_SCHEMAS_ENABLE: true
+      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      KEY_CONVERTER_SCHEMAS_ENABLE: true
       VALUE_CONVERTER_SCHEMAS_ENABLE: true
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: true
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: true
-      ENABLE_APICURIO_CONVERTERS: true
-      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      # ENABLE_APICURIO_CONVERTERS: true
+      # CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_URL: http://apicurio:8080/apis/registry/v2
       # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER: true
       # CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_FIND-LATEST: true
-      CONNECT_VALUE_CONVERTER: io.apicurio.registry.utils.converter.AvroConverter
-      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL: http://apicurio:8080/apis/registry/v2
-      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER: true
-      CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST: true
-      CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE: avro
+      # CONNECT_VALUE_CONVERTER: io.apicurio.registry.utils.converter.AvroConverter
+      # CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL: http://apicurio:8080/apis/registry/v2
+      # CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER: true
+      # CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST: true
+      # CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE: avro
       # CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
       # CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
-    depends_on: [kafka, apicurio]
+    depends_on: [kafka]
     ports:
       - 8083:8083
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:5.5.3
-    environment:
-      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
-      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
-      - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8085,http://localhost:8085
-    ports:
-      - 8085:8085
-    depends_on: [zookeeper, kafka]
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:5.5.3
+  #   environment:
+  #     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+  #     - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+  #     - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8085,http://localhost:8085
+  #   ports:
+  #     - 8085:8085
+  #   depends_on: [zookeeper, kafka]
