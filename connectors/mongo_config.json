@@ -7,7 +7,6 @@
     "mongodb.password": "password",
     "topic.prefix": "test",
     "collection.include.list": "test.products",
-    "tasks.max": "1"
-
+    "capture.mode": "change_streams_with_pre_image"
   }
 }
