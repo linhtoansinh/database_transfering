@@ -110,3 +110,12 @@ services:
   #   ports:
   #     - 8085:8085
   #   depends_on: [zookeeper, kafka]
+
+  backend-mongo:
+    image: mongo
+    container_name: backend-mongo
+    ports:
+      - 27018:27017
+    volumes:
+      - ./docker/backend-mongo:/data/db
+    command: --replSet rs0 --oplogSize 128
