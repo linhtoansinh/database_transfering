@@ -1,6 +1,7 @@
 from backend.models.connector import Connector
 from backend.repositories.base_repository import BaseRepository
 from backend.repositories.source_repository import SourceRepository
+from backend.services.kafka_connect import KafkaConnect
 
 
 class SourceService:
@@ -19,8 +20,7 @@ class SourceService:
         try:
             # add kafka connection here
             # ...
-
+            KafkaConnect.post_kafka_connector(connector)
             return connector
         except:
-            self.repository.remove(_id)
             raise

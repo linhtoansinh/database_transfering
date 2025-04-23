@@ -27,7 +27,7 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
 
 
 
-# Copy the source code into the container.
-COPY . .
+# # Copy the source code into the container.
+# COPY . .
 
 EXPOSE 8000
