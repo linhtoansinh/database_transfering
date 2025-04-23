@@ -1,4 +1,4 @@
 from enum import Enum
 
-class SourceConnector(Enum):
+class SinkConnector(Enum):
     postgresql = "postgresql"
