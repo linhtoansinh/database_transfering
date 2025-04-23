@@ -119,3 +119,18 @@ services:
     volumes:
       - ./docker/backend-mongo:/data/db
     command: --replSet rs0 --oplogSize 128
+
+  backend:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - backend-mongo
+    container_name: backend
+    env_file: backend/.env
+    environment:
+      - MONGO_URL=mongodb://backend-mongo:27017?replicaSet=rs0
+      - MONGO_DB_NAME=database_transfering
+    command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
