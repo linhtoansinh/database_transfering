@@ -2,7 +2,7 @@ import os
 import requests
 
 from backend.exceptions.exceptions import ApiErrorCodeException
-from backend.models.connector import Connector
+from backend.models.source_connector import SourceConnector
 
 class KafkaConnect:
     KAFKA_CONNECT_TIMEOUT = 15
@@ -36,7 +36,7 @@ class KafkaConnect:
             raise ApiErrorCodeException(message, response.status_code, {})
 
     @staticmethod    
-    def post_kafka_connector(connector: Connector):
+    def post_kafka_connector(connector: SourceConnector):
         try:
             url = os.environ["KAFKA_CONNECT"] + "/connectors/"
 
@@ -47,5 +47,5 @@ class KafkaConnect:
                 json=connector.model_dump()
             )
 
-        except Exception as e:
+        except:
             raise

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
-from backend.models.connector import Connector
-from backend.repositories.source_repository import SourceRepository
+from backend.models.source_connector import SourceConnector
+from backend.requests.source_connector_create import SourceConnectorCreate
 from backend.services.source_service import SourceService
 
 router = APIRouter(tags=["source-connectors"], prefix="/source-connectors")
@@ -9,7 +9,7 @@ router = APIRouter(tags=["source-connectors"], prefix="/source-connectors")
 sourceService = SourceService()
 
 @router.post("/")
-async def createSource(connector: Connector) -> Connector:
+async def createSource(connector: SourceConnectorCreate) -> SourceConnector:
     try:
         return sourceService.create(connector)
 
