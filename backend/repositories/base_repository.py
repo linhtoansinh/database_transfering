@@ -18,32 +18,38 @@ class BaseRepository:
         try: 
             result = self.collection.insert_one(document)
             return result.inserted_id
-        except Exception:
+        except:
             raise
 
     def update(self, id: str, document: dict) -> str:
         try:
             result = self.collection.update_one({"_id": id}, {"$set": document})
             return result.upserted_id
-        except Exception:
+        except:
             raise
 
     def get_all(self) -> list[T]:
         try:
             records = self.collection.find()
             return [self.model.model_validate(record) for record in records]
-        except Exception:
+        except:
             raise
 
     def get(self, id: str) -> Optional[T]:
         try:
             record = self.collection.find_one({"_id": id})
             return self.model.model_validate(record) if record else None
-        except Exception:
+        except:
             raise
 
     def remove(self, id: str):
         try:
             self.collection.delete_one({"_id": id})
-        except Exception:
+        except:
+            raise
+
+    def remove_by_filter(self, filter: dict):
+        try:
+            self.collection.delete_many(filter=filter)
+        except:
             raise

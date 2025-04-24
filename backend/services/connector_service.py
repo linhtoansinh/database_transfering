@@ -1,14 +1,11 @@
 from backend.models.connector import Connector
-from backend.repositories.base_repository import BaseRepository
-from backend.repositories.source_repository import SourceRepository
+from backend.repositories.connector_repository import ConnectorRepository
 from backend.services.kafka_connect import KafkaConnect
 
 
-class SourceService:
-    repository: BaseRepository
-
+class ConnectorService:
     def __init__(self):
-        self.repository = SourceRepository()
+        self.repository = ConnectorRepository()
 
     def create(self, connector: Connector):
         try:
@@ -18,9 +15,14 @@ class SourceService:
             raise
 
         try:
-            # add kafka connection here
-            # ...
             KafkaConnect.post_kafka_connector(connector)
             return connector
+        except:
+            raise
+
+    def delete(self, connector_name: str):
+        try:
+            KafkaConnect.delete_connector(connector_name=connector_name)
+            self.repository.remove_by_filter({"name": connector_name})
         except:
             raise

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from backend.apis.source_api import router as source_router
+from backend.apis.connector_api import router as connector_router
 
 app = FastAPI()
 
-app.include_router(source_router)
+app.include_router(connector_router)

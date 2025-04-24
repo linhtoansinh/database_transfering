@@ -11,8 +11,8 @@ class KafkaConnect:
     def call_kafka_api(
         url,
         method,
-        headers,
-        json,
+        headers={},
+        json=None,
         success_lower_bound: int = 200,
         success_upper_bound: int = 299,
     ):
@@ -35,7 +35,7 @@ class KafkaConnect:
 
             raise ApiErrorCodeException(message, response.status_code, {})
 
-    @staticmethod    
+    @staticmethod
     def post_kafka_connector(connector: Connector):
         try:
             url = os.environ["KAFKA_CONNECT"] + "/connectors/"
@@ -43,9 +43,21 @@ class KafkaConnect:
             KafkaConnect.call_kafka_api(
                 url=url,
                 method="POST",
-                headers={},
                 json=connector.model_dump()
             )
 
-        except Exception as e:
+        except:
+            raise
+
+    @staticmethod
+    def delete_connector(connector_name: str):
+        try:
+            url = os.environ["KAFKA_CONNECT"] + "/connectors/" + connector_name
+
+            KafkaConnect.call_kafka_api(
+                url=url,
+                method="DELETE"
+            )
+
+        except:
             raise
