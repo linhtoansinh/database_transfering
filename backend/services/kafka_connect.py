@@ -1,6 +1,7 @@
 import os
 import requests
 
+from backend.enums.connector_actions import ConnectorAction
 from backend.exceptions.exceptions import ApiErrorCodeException
 from backend.models.connector import Connector
 
@@ -50,6 +51,20 @@ class KafkaConnect:
             raise
 
     @staticmethod
+    def put_kafka_connector(connector: Connector):
+        try:
+            url = os.environ["KAFKA_CONNECT"] + "/connectors/" + connector.name + "/config"
+
+            KafkaConnect.call_kafka_api(
+                url=url,
+                method="PUT",
+                json=connector.config
+            )
+
+        except:
+            raise
+
+    @staticmethod
     def delete_connector(connector_name: str):
         try:
             url = os.environ["KAFKA_CONNECT"] + "/connectors/" + connector_name
@@ -58,6 +73,25 @@ class KafkaConnect:
                 url=url,
                 method="DELETE"
             )
+
+        except:
+            raise
+
+    @staticmethod
+    def execute_connector_action(action: ConnectorAction, connector_name: str):
+        try:
+            url = os.environ["KAFKA_CONNECT"] + "/connectors/" + connector_name + "/" + action
+
+            if action == ConnectorAction.restart:
+                KafkaConnect.call_kafka_api(
+                    url=url,
+                    method="POST"
+                )
+            else:
+                KafkaConnect.call_kafka_api(
+                    url=url,
+                    method="PUT"
+                )
 
         except:
             raise
