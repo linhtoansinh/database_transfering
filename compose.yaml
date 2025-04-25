@@ -48,12 +48,14 @@ services:
       - MYSQL_PASSWORD=mysql
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.3
+    image: confluentinc/cp-zookeeper:7.8.2
+    # image: confluentinc/cp-zookeeper:5.5.3
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
-    image: confluentinc/cp-enterprise-kafka:5.5.3
+    image: confluentinc/cp-enterprise-kafka:7.8.2
+    # image: confluentinc/cp-enterprise-kafka:5.5.3
     depends_on: [zookeeper]
     environment:
       KAFKA_BROKER_ID: 1
@@ -72,7 +74,8 @@ services:
   #     - 8080:8080
 
   debezium:
-    image: debezium/connect:2.3
+    image: debezium/connect:3.0.0.Final
+    # image: debezium/connect:2.3
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
