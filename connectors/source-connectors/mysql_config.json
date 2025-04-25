@@ -7,11 +7,17 @@
     "database.user": "root",
     "database.password": "mysql",
     "database.server.id": "222222",
-    "topic.prefix": "test",
+    "topic.prefix": "mysql-connector",
     "database.include.list": "test",
     "table.include.list": "test.products",
     "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
     "schema.history.internal.kafka.topic": "schemahistory.products",
-    "snapshot.mode": "schema_only"
+    "snapshot.mode": "schema_only",
+    
+    "transforms": "extract",
+
+    "transforms.extract.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.extract.drop.tombstones": "true",
+    "transforms.extract.delete.handling.mode": "rewrite"
   }
 }

@@ -4,11 +4,21 @@
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "database.hostname": "postgres-source",
     "database.port": "5432",
-    "database.user": "postgres",
+    "database.user": "test",
     "database.password": "postgres",
     "database.dbname": "test",
-    "topic.prefix": "test",
+
+    "topic.prefix": "postgres-source-connector",
     "table.include.list": "test.products",
-    "plugin.name": "pgoutput"
+
+    "plugin.name": "pgoutput",
+    "slot.name": "debezium",
+    "publication.name": "dbz_publication",
+
+    "transforms": "extract",
+
+    "transforms.extract.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.extract.drop.tombstones": "true",
+    "transforms.extract.delete.handling.mode": "rewrite"
   }
 }

@@ -5,8 +5,14 @@
     "mongodb.connection.string": "mongodb://mongo/?replicaSet=rs0",
     "mongodb.user": "debezium",
     "mongodb.password": "password",
-    "topic.prefix": "test",
+    "topic.prefix": "mongo-connector",
     "collection.include.list": "test.products",
-    "capture.mode": "change_streams_with_pre_image"
+    "capture.mode": "change_streams_with_pre_image",
+    
+    "transforms": "extract",
+
+    "transforms.extract.type": "io.debezium.connector.mongodb.transforms.ExtractNewDocumentState",
+    "transforms.extract.drop.tombstones": "true",
+    "transforms.extract.delete.handling.mode": "rewrite"
   }
 }

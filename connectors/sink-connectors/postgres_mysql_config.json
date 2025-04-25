@@ -1,5 +1,5 @@
 {
-  "name": "postgres-mysql-connector",
+  "name": "jdbc-connector",
   "config": {
     "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
     "tasks.max": "1",
@@ -12,14 +12,10 @@
     "primary.key.fields": "id",
     "schema.evolution": "basic",
     "use.time.zone": "UTC",
-    "topics": "test.test.products",
+    "topics": "mysql-connector.test.products",
     "collection.name.format": "products",
 
-    "transforms": "extract,route",
-
-    "transforms.extract.type": "io.debezium.transforms.ExtractNewRecordState",
-    "transforms.extract.drop.tombstones": "true",
-    "transforms.extract.delete.handling.mode": "rewrite",
+    "transforms": "route",
 
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
